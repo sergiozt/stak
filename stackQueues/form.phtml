@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>Stack fifo</title>
+    </head>
+    <body>
+        <h1 style="text-align: center; font-style: italic">Stack fifo</h1>
+        <div class="stack_from" style ="float:left; width: 300px; height: 387px; border:1px solid gray; padding: 10px;">
+            <form method= "post" style="text-align: center">
+                <select name="stack_type" style =" width: 100px;">
+                    <option value ="lifo">Lifo</option>
+                    <option  <?php if (isset($_POST['stack_type']) && $_POST['stack_type']=="queues"){?> selected="selected" <?php } ?>value ="queues">Queues</option>
+                </select>
+                <input name="set_element" value="" type="text"><br>
+                <p><input type="submit" value="Set Element" name="set"></p>
+                <p><input type="submit" value="Get Element" name="get"></p>
+                <p><input type="submit" value="Clear Stack" name="clear"></p>
+            </form>
+            <?php
+                if (isset ($_POST['set']) && !empty($_POST['set_element'])){
+                    if( $elements = $stack->setElement($_POST['set_element'])){
+                        echo "Element was added successfully";
+                    }else{
+                        echo "Stack is full !!!";
+                    };
+                }elseif (isset ($_POST['get'])){
+                    echo $currentElement = $stack->getElement();
+                }
+            ?>
+        </div>
+        <div class="stack_from" style ="float:left; width: 600px; height: 387px; border:1px solid gray; padding: 10px; marging:  10px;">
+            <?php
+            $stackElements = array();
+            if (! empty($_SESSION['stack'])){
+                $stackElements = $_SESSION['stack'];
+            }
+             foreach ($stackElements as $element){
+                 $viewType="</br>";
+                 if(isset($_POST['stack_type']) && $_POST['stack_type'] == 'queues'){
+                     $viewType='';
+                 }
+                if(isset($currentElement) && $currentElement == $element){
+                    echo '<span style ="color:red; font-weight: bold;">|'.$element.'|</span>'.$viewType;
+                }else{
+                    echo '|'.$element.'|'.$viewType;
+                }
+            }
+            ?>
+        </div>
+    </body>
+</html>
