@@ -3,7 +3,7 @@
         <title>Stack fifo</title>
     </head>
     <body>
-        <h1 style="text-align: center; font-style: italic">Stack fifo</h1>
+        <h1 style="text-align: center; font-style: italic">LIFO (stack) and FIFO (queue)</h1>
         <div class="stack_from" style ="float:left; width: 300px; height: 387px; border:1px solid gray; padding: 10px;">
             <form method= "post" style="text-align: center">
                 <select name="stack_type" style =" width: 100px;">
@@ -34,14 +34,10 @@
                 $stackElements = $_SESSION['stack'];
             }
              foreach ($stackElements as $element){
-                 $viewType="</br>";
-                 if(isset($_POST['stack_type']) && $_POST['stack_type'] == 'queues'){
-                     $viewType='';
-                 }
-                if(isset($currentElement) && $currentElement == $element){
-                    echo '<span style ="color:red; font-weight: bold;">|'.$element.'|</span>'.$viewType;
+                                if(isset($currentElement) && $currentElement == $element){
+                    echo '<span style ="color:red; font-weight: bold;">|'.$element.'|</span><br>';
                 }else{
-                    echo '|'.$element.'|'.$viewType;
+                    echo '|'.$element.'|<br>';
                 }
             }
             ?>

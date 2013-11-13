@@ -1,0 +1,145 @@
+<?php
+/**
+ * User: s.zheleznitskij
+ * Date: 11/13/13
+ * Time: 3:07 PM
+ */
+
+/**
+ * Set 10000 elements using SPL.
+ */
+$startTimeSpl = microtime(true);
+$startMemorySPL = memory_get_usage();
+
+$list = new SplDoublyLinkedList();
+for($i = 1; $i < 10000; $i++){
+    $list->push($i);
+}
+
+$memoryResultSpl = memory_get_usage() - $startMemorySPL.'<br>';
+$timeResultSpl = microtime(true) - $startTimeSpl;
+
+/**
+ * Set 10000 elements using Class.
+ */
+class Linked_List
+{
+    protected $_head = null;
+    protected $_tail = null;
+
+    public function insert($item)
+    {
+        if ($this->_head == null) {
+            $this->_head = $item;
+            $this->_tail = $item;
+            return;
+        }
+
+        $this->_tail->setNext($item);
+        $this->_tail = $item;
+    }
+
+    public function __toString()
+    {
+        $current = $this->_head;
+        $output = '';
+
+        while ($current) {
+            $output .= $current->getKey() . "\n";
+            $current = $current->getNext();
+        }
+
+        return $output;
+    }
+}
+
+class Item
+{
+    protected $_key = '';
+    protected $_next = null;
+
+    public function __construct($key)
+    {
+        $this->_key = $key;
+    }
+
+    public function setNext(&$next) { $this->_next = $next; }
+    public function &getNext() { return $this->_next; }
+
+    public function setKey($key) { $this->_key = $key; }
+    public function getKey() { return $this->_key; }
+
+    public function __toString()
+    {
+        return $this->_key . "\n";
+    }
+}
+
+
+
+$startTimeNative = microtime(true);
+$startMemoryNative = memory_get_usage();
+$stackFifo = array();
+$n = 10000;
+$a = array();
+for ($i = 0; $i < $n; $i++) {
+    $a[$i] = new Item($i);
+}
+$memoryResultNative = memory_get_usage() - $startMemoryNative;
+$timeResultNative = microtime(true) - $startTimeNative;
+
+
+$startTimeClass = microtime(true);
+$startMemoryClass = memory_get_usage();
+$n = 10000;
+$a = new Linked_List();
+for ($i = 0; $i < $n; $i++) {
+    $a->insert(new Item($i));
+}
+$memoryResultClass =  $startMemoryClass -memory_get_usage() ;
+$timeResultClass = microtime(true) - $startTimeClass;
+
+
+?>
+<h1 style="text-align: center">The table of memory usage and time execute  differences using Linked list, Class and Native methods</h1>
+
+
+
+<table>
+    <tr class = "head">
+        <td>Method</td>
+        <td>Memory usage</td>
+        <td>Time execute</td>
+    <tr>
+    <tr>
+        <td>SPL</td>
+        <td><?php echo $memoryResultSpl?></td>
+        <td><?php echo $timeResultSpl?></td>
+    <tr>
+    <tr>
+        <td>Native </td>
+        <td><?php echo $memoryResultNative?></td>
+        <td><?php echo $timeResultNative?></td>
+    <tr>
+    <tr>
+        <td>Class</td>
+        <td><?php echo $memoryResultClass ?></td>
+        <td><?php echo $timeResultClass ?></td>
+    <tr>
+</table>
+
+
+<style>
+    table{
+        width: 600px;
+        text-align: center;
+        border-collapse: collapse;
+    }
+    .head{
+        background-color: lightyellow;
+    }
+    td {
+        border:1px solid darkslategray;
+        text-align: :center;
+    }
+</style>
